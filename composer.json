@@ -7,7 +7,7 @@
         "illuminate/database": "^5.5",
         "illuminate/pagination": "^5.5"
     },
-    "license": "GPL",
+    "license": "MIT",
     "authors": [
         {
             "name": "Amos Lee",
