@@ -14,7 +14,7 @@ To install this package, edit your `composer.json` file:
 ```js
 {
     "require": {
-        "tareq1988/wp-eloquent": "1.0"
+        "wenprise/eloquent": "0.1"
     }
 }
 ```
@@ -22,6 +22,10 @@ To install this package, edit your `composer.json` file:
 Now run:
 
 `$ composer install`
+
+Or run:
+
+`$ composer require wenprise/eloquent`
 
 # Usage Example
 
@@ -125,13 +129,13 @@ Here `users` is the table name **without prefix**. The prefix will be applied au
 
 ### Other Examples
 
- - [Queries](http://laravel.com/docs/5.0/queries)
- - [Eloquent ORM](http://laravel.com/docs/5.0/eloquent)
+ - [Queries](http://laravel.com/docs/5.5/queries)
+ - [Eloquent ORM](http://laravel.com/docs/5.5/eloquent)
 
 ## Writing a Model
 
 ```php
-use \Wenprise\ORM\Eloquent\Model as Model;
+use \Wenprise\ORM\Eloquent\Model;
 
 class Employee extends Model {
 
@@ -152,14 +156,14 @@ The class name `Employee` will be translated into `PREFIX_employees` table to ru
 
 
 ```php
-use Wenprise\ORM\WP\Post as Post;
+use Wenprise\ORM\WP\Post;
 
 var_dump( Post::all() ); //returns only posts with WordPress post_type "post"
 ```
 
 #### Filter `Post` by `post_status` and `post_type`
 ```php
-use Wenprise\ORM\WP\Post as Post;
+use Wenprise\ORM\WP\Post;
 var_dump(Post::type('page')->get()->toArray()); // get pages
 var_dump(Post::status('publish')->get()->toArray()); // get posts with publish status
 var_dump(Post::type('page')->status('publish')->get()->toArray()); // get pages with publish status
@@ -174,7 +178,7 @@ var_dump(Post::type('page')->status('publish')->get()->toArray()); // get pages 
 
 
 ## Minimum Requirement
- - PHP 5.3.0
+ - PHP 7.0
  - WordPress 3.6+
 
 ## Author
