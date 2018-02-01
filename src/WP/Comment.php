@@ -2,7 +2,6 @@
 
 namespace Wenprise\ORM\WP;
 
-
 use Wenprise\ORM\Eloquent\Model;
 
 class Comment extends Model
