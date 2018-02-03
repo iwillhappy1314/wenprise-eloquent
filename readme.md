@@ -58,7 +58,6 @@ $post = Post::find(31);
 echo $post->post_title;
 ```
 
-
 ## Pages
 
 Pages are like custom post types. You can use `Post::type('page')` or the `Wenprise\ORM\WP\Page` class.
@@ -69,11 +68,6 @@ $page = Page::slug('about')->first(); // OR
 $page = Post::type('page')->slug('about')->first();
 echo $page->post_title;
 ```
-
-### Other Examples
-
- - [Queries](http://laravel.com/docs/5.5/queries)
- - [Eloquent ORM](http://laravel.com/docs/5.5/eloquent)
 
 ## Meta Data (Custom Fields)
 
@@ -221,7 +215,7 @@ $cat->posts->each(function($post) {
 });
 ```
  
-##Attachment and Revision
+## Attachment and Revision
 
 Getting the attachment and/or revision from a `Post` or `Page`.
 
