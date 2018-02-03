@@ -207,12 +207,6 @@ $cat = Taxonomy::where('taxonomy', 'category')->with('posts')->get();
 $cat->each(function($category) {
     echo $category->name;
 });
-
-// clean and simple all posts from a category
-$cat = Category::slug('uncategorized')->first()->posts();
-$cat->posts->each(function($post) {
-    echo $post->post_title;
-});
 ```
  
 ## Attachment and Revision
