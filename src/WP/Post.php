@@ -257,7 +257,7 @@ class Post extends Model
      */
     public function getContentAttribute()
     {
-        return $this->stripShortcodes($this->post_content);
+        return do_shortcode($this->post_content);
     }
 
     /**
@@ -265,7 +265,7 @@ class Post extends Model
      */
     public function getExcerptAttribute()
     {
-        return $this->stripShortcodes($this->post_excerpt);
+        return do_shortcode($this->post_excerpt);
     }
 
     /**
