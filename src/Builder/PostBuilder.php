@@ -57,6 +57,15 @@ class PostBuilder extends Builder
     }
 
     /**
+     * @param string $postParentId
+     * @return PostBuilder
+     */
+    public function parent($postParentId)
+    {
+        return $this->where('post_parent', $postParentId);
+    }
+
+    /**
      * @param string $taxonomy
      * @param mixed $terms
      * @return PostBuilder

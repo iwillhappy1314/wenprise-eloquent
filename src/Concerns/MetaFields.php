@@ -16,7 +16,7 @@ trait MetaFields
     /**
      * @var array
      */
-    private $builtInClasses = [
+    protected $builtInClasses = [
         \Wenprise\ORM\WP\Comment::class => \Wenprise\ORM\Meta\CommentMeta::class,
         \Wenprise\ORM\WP\Post::class => \Wenprise\ORM\Meta\PostMeta::class,
         \Wenprise\ORM\WP\Term::class => \Wenprise\ORM\Meta\TermMeta::class,
