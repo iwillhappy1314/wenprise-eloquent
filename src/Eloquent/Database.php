@@ -77,11 +77,13 @@ class Database implements ConnectionInterface
 	/**
 	 * Begin a fluent query against a database table.
 	 *
-	 * @param  string $table
-	 *
-	 * @return \Illuminate\Database\Query\Builder
+     *
+     * @param \Closure|\Illuminate\Database\Query\Builder|string $table
+     * @param null                                               $as *
+     *
+* @return \Illuminate\Database\Query\Builder
 	 */
-	public function table( $table )
+	public function table($table, $as = null)
 	{
 		$processor = $this->getPostProcessor();
 
@@ -105,14 +107,15 @@ class Database implements ConnectionInterface
 	/**
 	 * Run a select statement and return a single result.
 	 *
-	 * @param  string $query
-	 * @param  array  $bindings
+     *
+     * @param string $query
+     * @param array  $bindings
+     * @param true   $useReadPdo * @return mixed
 	 *
-	 * @throws QueryException
+	 *@throws QueryException
 	 *
-	 * @return mixed
 	 */
-	public function selectOne( $query, $bindings = [] )
+	public function selectOne($query, $bindings = [], $useReadPdo = true)
 	{
 		$query = $this->bind_params( $query, $bindings );
 
@@ -125,17 +128,33 @@ class Database implements ConnectionInterface
 		return $result;
 	}
 
+
+    /**
+     * Get a new query builder instance.
+     *
+     * @return \Illuminate\Database\Query\Builder
+     */
+    public function query()
+    {
+        return new Builder(
+            $this,
+            $this->getQueryGrammar(),
+            $this->getPostProcessor()
+        );
+    }
+
 	/**
 	 * Run a select statement against the database.
 	 *
-	 * @param  string $query
-	 * @param  array  $bindings
+     *
+     * @param string $query
+     * @param array  $bindings
+     * @param true   $useReadPdo * @return array
 	 *
-	 * @throws QueryException
+	 *@throws QueryException
 	 *
-	 * @return array
 	 */
-	public function select( $query, $bindings = [] )
+	public function select($query, $bindings = [], $useReadPdo = true)
 	{
 		$query = $this->bind_params( $query, $bindings );
 
@@ -459,4 +478,9 @@ class Database implements ConnectionInterface
 		return $this->db->insert_id;
 	}
 
+
+    public function cursor($query, $bindings = [], $useReadPdo = true)
+    {
+        // TODO: Implement cursor() method.
+    }
 }
