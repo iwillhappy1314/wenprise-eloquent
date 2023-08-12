@@ -70,6 +70,10 @@ class Database implements ConnectionInterface
 		$this->db = $wpdb;
 	}
 
+    public function getDatabaseName(): string {
+        return $this->db->dbname;
+    }
+
 	/**
 	 * Begin a fluent query against a database table.
 	 *
