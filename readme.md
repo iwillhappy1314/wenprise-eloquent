@@ -304,6 +304,15 @@ class Employee extends Model {
      * @var string
      */
     protected $guarded = [ 'ID' ];
+    
+    /**
+     * The column names allow to be filled 
+     * @var array
+     */
+    protected $fillable = [
+        'name',
+        'status',
+    ];
 
 }
 
