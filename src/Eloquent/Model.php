@@ -30,9 +30,9 @@ abstract class Model extends Eloquent
     /**
      * Get the database connection for the model.
      *
-     * @return \Illuminate\Database\Connection|\Wenprise\ORM\Eloquent\Database
+     * @return \Wenprise\ORM\Eloquent\Database
      */
-    public function getConnection()
+    public function getConnection(): Database
     {
         return Database::instance();
     }
@@ -45,15 +45,9 @@ abstract class Model extends Eloquent
      *
      * @return string
      */
-    public function getTable()
+    public function getTable(): string
     {
-        if (isset($this->table)) {
-            $table = $this->table;
-        } else {
-            $table = str_replace('\\', '', Str::snake(Str::plural(class_basename($this))));
-        }
-
-        return $table;
+        return $this->table ?? str_replace('\\', '', Str::snake(Str::plural(class_basename($this))));
     }
 
     /**
@@ -69,7 +63,7 @@ abstract class Model extends Eloquent
      * @param string $localKey
      * @return HasMany
      */
-    public function hasMany($related, $foreignKey = null, $localKey = null)
+    public function hasMany($related, $foreignKey = null, $localKey = null): HasMany
     {
         $foreignKey = $foreignKey ?: $this->getForeignKey();
 
@@ -88,7 +82,7 @@ abstract class Model extends Eloquent
      * @param string $localKey
      * @return HasOne
      */
-    public function hasOne($related, $foreignKey = null, $localKey = null)
+    public function hasOne($related, $foreignKey = null, $localKey = null): HasOne
     {
         $foreignKey = $foreignKey ?: $this->getForeignKey();
 
@@ -104,14 +98,15 @@ abstract class Model extends Eloquent
      *
      * @param string $related
      * @param string $foreignKey
-     * @param string $otherKey
+     * @param string $ownerKey
      * @param string $relation
+     *
      * @return BelongsTo
      */
-    public function belongsTo($related, $foreignKey = null, $otherKey = null, $relation = null)
+    public function belongsTo($related, $foreignKey = null, $ownerKey = null, $relation = null): BelongsTo
     {
         if (is_null($relation)) {
-            list(, $caller) = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+            [, $caller] = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
             $relation = $caller['function'];
         }
 
@@ -123,9 +118,9 @@ abstract class Model extends Eloquent
 
         $query = $instance->newQuery();
 
-        $otherKey = $otherKey ?: $instance->getKeyName();
+        $ownerKey = $ownerKey ?: $instance->getKeyName();
 
-        return new BelongsTo($query, $this, $foreignKey, $otherKey, $relation);
+        return new BelongsTo($query, $this, $foreignKey, $ownerKey, $relation);
     }
 
     /**
@@ -148,7 +143,7 @@ abstract class Model extends Eloquent
         $parentKey = null,
         $relatedKey = null,
         $relation = null
-    ) {
+    ): BelongsToMany {
         if (is_null($relation)) {
             $relation = $this->guessBelongsToManyRelation();
         }
@@ -206,7 +201,7 @@ abstract class Model extends Eloquent
     /**
      * @return string
      */
-    public function getConnectionName()
+    public function getConnectionName(): string
     {
         return 'wpdb';
     }

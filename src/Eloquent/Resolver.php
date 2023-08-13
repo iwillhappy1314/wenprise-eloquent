@@ -10,7 +10,7 @@ class Resolver implements ConnectionResolverInterface {
      *
      * @param  string $name
      *
-     * @return \Illuminate\Database\Connection
+     * @return false|\Wenprise\ORM\Eloquent\Database
      */
     public function connection( $name = null ) {
         return Database::instance();
@@ -19,7 +19,7 @@ class Resolver implements ConnectionResolverInterface {
     /**
      * Get the default connection name.
      *
-     * @return string
+     * @return void
      */
     public function getDefaultConnection() {
         // TODO: Implement getDefaultConnection() method.
