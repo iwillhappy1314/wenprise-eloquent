@@ -47,7 +47,14 @@ abstract class Model extends Eloquent
      */
     public function getTable(): string
     {
-        return $this->table ?? str_replace('\\', '', Str::snake(Str::plural(class_basename($this))));
+        $table  = $this->table ?? str_replace('\\', '', Str::snake(Str::plural(class_basename($this))));
+        $prefix = $this->getConnection()->db->prefix;
+
+        if ( ! Str::startsWith($table, $prefix)) {
+            $table = $prefix . $table;
+        }
+
+        return $table;
     }
 
     /**
