@@ -69,6 +69,20 @@ $page = Post::type('page')->slug('about')->first();
 echo $page->post_title;
 ```
 
+## Comments
+
+```php
+use Wenprise\ORM\WP\Comment;
+
+// Get Comment with id 12345
+$comment = Comment::find(12345);
+
+// Get related data
+$comment->post;
+$comment->author;
+$comment->meta
+```
+
 ## Meta Data (Custom Fields)
 
 You can retrieve meta data from posts too.
@@ -236,7 +250,7 @@ $user = User::find(1);
 echo $user->user_login;
 ```
 
-##Options
+## Options
 
 You can use the `Option` class to get data from `wp_options` table:
 
