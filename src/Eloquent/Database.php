@@ -487,8 +487,26 @@ class Database implements ConnectionInterface
     }
 
 
+    /**
+     * Run a select statement against the database and returns a generator.
+     * TODO: Implement cursor and all the related sub-methods.
+     *
+     * @param string $query
+     * @param array  $bindings
+     * @param bool   $useReadPdo
+     *
+     * @return \Generator
+     */
     public function cursor($query, $bindings = [], $useReadPdo = true)
     {
-        // TODO: Implement cursor() method.
+        $query = $this->bind_params($query, $bindings);
+
+        if ($result = mysqli_query($this->dbh, $query)) {
+            while ($row = mysqli_fetch_object($result)) {
+                yield $row;
+            }
+            mysqli_free_result($result);
+        }
     }
+
 }
