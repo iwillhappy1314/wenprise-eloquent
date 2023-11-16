@@ -1,6 +1,6 @@
 <?php
 
-namespace Wenprise\ORM\Eloquent;
+namespace Wenprise\Eloquent;
 
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Query\Builder;
@@ -43,7 +43,7 @@ class Database implements ConnectionInterface
     /**
      * Initializes the Database class
      *
-     * @return \Wenprise\ORM\Eloquent\Database
+     * @return \Wenprise\Eloquent\Database
      */
     public static function instance()
     {
@@ -467,7 +467,7 @@ class Database implements ConnectionInterface
     /**
      * Return self as PDO
      *
-     * @return \Wenprise\ORM\Eloquent\Database
+     * @return \Wenprise\Eloquent\Database
      */
     public function getPdo(): Database
     {

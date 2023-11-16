@@ -1,9 +1,9 @@
 <?php
 
-namespace Wenprise\ORM\Eloquent\Facades;
+namespace Wenprise\Eloquent\Facades;
 
 use Illuminate\Support\Facades\Facade;
-use Wenprise\ORM\Eloquent\Database;
+use Wenprise\Eloquent\Database;
 
 /**
  * @see \Illuminate\Database\DatabaseManager
@@ -14,7 +14,7 @@ class DB extends Facade
     /**
      * Get the registered name of the component.
      *
-     * @return false|\Wenprise\ORM\Eloquent\Database
+     * @return false|\Wenprise\Eloquent\Database
      */
     protected static function getFacadeAccessor()
     {

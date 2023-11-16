@@ -1,6 +1,6 @@
 <?php
 
-namespace Wenprise\ORM\Eloquent;
+namespace Wenprise\Eloquent;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model as Eloquent;
@@ -30,7 +30,7 @@ abstract class Model extends Eloquent
     /**
      * Get the database connection for the model.
      *
-     * @return \Wenprise\ORM\Eloquent\Database
+     * @return \Wenprise\Eloquent\Database
      */
     public function getConnection(): Database
     {

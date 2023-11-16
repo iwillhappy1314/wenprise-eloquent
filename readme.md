@@ -30,14 +30,14 @@ This is a library package to use Laravel's [Eloquent ORM](http://laravel.com/doc
 ## Basic Usage
 
 ```php
-$db = \Wenprise\ORM\Eloquent\Database::instance();
+$db = \Wenprise\Eloquent\Database::instance();
 
 var_dump( $db->table('users')->find(1) );
 var_dump( $db->select('SELECT * FROM wp_users WHERE id = ?', [1]) );
 var_dump( $db->table('users')->where('user_login', 'john')->first() );
 
 // OR with DB facade
-use \Wenprise\ORM\Eloquent\Facades\DB;
+use \Wenprise\Eloquent\Facades\DB;
 
 var_dump( DB::table('users')->find(1) );
 var_dump( DB::select('SELECT * FROM wp_users WHERE id = ?', [1]) );
@@ -282,7 +282,7 @@ echo $options['home'];
 ## Writing a Model
 
 ```php
-use \Wenprise\ORM\Eloquent\Model;
+use \Wenprise\Eloquent\Model;
 
 class Employee extends Model {
 

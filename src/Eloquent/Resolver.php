@@ -1,5 +1,5 @@
 <?php
-namespace Wenprise\ORM\Eloquent;
+namespace Wenprise\Eloquent;
 
 use Illuminate\Database\ConnectionResolverInterface;
 
@@ -10,7 +10,7 @@ class Resolver implements ConnectionResolverInterface {
      *
      * @param  string $name
      *
-     * @return false|\Wenprise\ORM\Eloquent\Database
+     * @return false|\Wenprise\Eloquent\Database
      */
     public function connection( $name = null ) {
         return Database::instance();
