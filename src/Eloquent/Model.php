@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 /**
  * Model Class
  *
- * @package Wenprise\ERP\Framework
+ * @package Wenprise\Eloquent
  */
 abstract class Model extends Eloquent
 {
@@ -57,10 +57,6 @@ abstract class Model extends Eloquent
         return $table;
     }
 
-    /**
-     * @var string
-     */
-    protected $postType;
 
     /**
      * Replace the original hasMany function to forward the connection name.
