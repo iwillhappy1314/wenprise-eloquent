@@ -15,6 +15,8 @@ class Database implements ConnectionInterface
 
     public $db;
 
+    public $dbh;
+
     /**
      * Count of active transactions
      *
@@ -68,6 +70,10 @@ class Database implements ConnectionInterface
         ];
 
         $this->db = $wpdb;
+
+        $this->dbh = (\Closure::bind(function () {
+            return $this->dbh;
+        }, $this->db, 'wpdb'))();
     }
 
 
