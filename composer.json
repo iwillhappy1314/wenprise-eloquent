@@ -10,8 +10,8 @@
   ],
   "homepage": "https://github.com/iwillhappy1314/wenprise-eloquent",
   "require": {
-    "illuminate/database": "^8.0|^9.0",
-    "illuminate/pagination": "^8.0|^9.0"
+    "illuminate/database": "^8.0|^9.0|^10.0",
+    "illuminate/pagination": "^8.0|^9.0|^10.0"
   },
   "license": "MIT",
   "authors": [
