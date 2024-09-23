@@ -30,11 +30,11 @@ abstract class Model extends Eloquent
     /**
      * Get the database connection for the model.
      *
-     * @return \Wenprise\Eloquent\Database
+     * @return \Wenprise\Eloquent\Connection
      */
-    public function getConnection(): Database
+    public function getConnection(): Connection
     {
-        return Database::instance();
+        return Connection::instance();
     }
 
     /**

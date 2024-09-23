@@ -10,10 +10,10 @@ class Resolver implements ConnectionResolverInterface {
      *
      * @param  string $name
      *
-     * @return false|\Wenprise\Eloquent\Database
+     * @return false|\Wenprise\Eloquent\Connection
      */
     public function connection( $name = null ) {
-        return Database::instance();
+        return Connection::instance();
     }
 
     /**

@@ -8,9 +8,11 @@ use Illuminate\Database\Query\Grammars\Grammar;
 use Illuminate\Database\Query\Processors\Processor;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Database\QueryException;
+use Illuminate\Database\Schema\Grammars\MySqlGrammar;
 use Illuminate\Support\Arr;
 
-class Database implements ConnectionInterface
+
+class Connection implements ConnectionInterface
 {
 
     public $db;
@@ -22,7 +24,7 @@ class Database implements ConnectionInterface
      *
      * @var int
      */
-    public $transactionCount = 0;
+    public int $transactionCount = 0;
 
 
     /**
@@ -30,7 +32,7 @@ class Database implements ConnectionInterface
      *
      * @var array
      */
-    protected $config = [];
+    protected array $config = [];
 
     /**
      * Get the database connection name.
@@ -45,7 +47,7 @@ class Database implements ConnectionInterface
     /**
      * Initializes the Database class
      *
-     * @return \Wenprise\Eloquent\Database
+     * @return \Wenprise\Eloquent\Connection
      */
     public static function instance()
     {
@@ -71,7 +73,8 @@ class Database implements ConnectionInterface
 
         $this->db = $wpdb;
 
-        $this->dbh = (\Closure::bind(function () {
+        $this->dbh = (\Closure::bind(function ()
+        {
             return $this->dbh;
         }, $this->db, 'wpdb'))();
     }
@@ -179,6 +182,21 @@ class Database implements ConnectionInterface
 
         return $result;
     }
+
+
+    /**
+     * Run a select statement against the database.
+     *
+     * @param string $query
+     * @param array  $bindings
+     *
+     * @return array
+     */
+    public function selectFromWriteConnection($query, $bindings = [])
+    {
+        return $this->select($query, $bindings, false);
+    }
+
 
     /**
      * A hacky way to emulate bind parameters into SQL query
@@ -470,12 +488,27 @@ class Database implements ConnectionInterface
         return new Grammar();
     }
 
+    public function getSchemaBuilder()
+    {
+        return new WPSchemaBuilder($this);
+    }
+
+    public function getSchemaGrammar()
+    {
+        return new MySqlGrammar();
+    }
+
+    public function getTablePrefix(): string
+    {
+        return '';
+    }
+
     /**
      * Return self as PDO
      *
-     * @return \Wenprise\Eloquent\Database
+     * @return \Wenprise\Eloquent\Connection
      */
-    public function getPdo(): Database
+    public function getPdo(): Connection
     {
         return $this;
     }

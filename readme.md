@@ -30,7 +30,7 @@ This is a library package to use Laravel's [Eloquent ORM](http://laravel.com/doc
 ## Basic Usage
 
 ```php
-$db = \Wenprise\Eloquent\Database::instance();
+$db = \Wenprise\Eloquent\Connection::instance();
 
 var_dump( $db->table('users')->find(1) );
 var_dump( $db->select('SELECT * FROM wp_users WHERE id = ?', [1]) );
