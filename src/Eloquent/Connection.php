@@ -2,6 +2,10 @@
 
 namespace Wenprise\Eloquent;
 
+use Closure;
+use DateTime;
+use Exception;
+use Generator;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\Grammars\Grammar;
@@ -73,7 +77,7 @@ class Connection implements ConnectionInterface
 
         $this->db = $wpdb;
 
-        $this->dbh = (\Closure::bind(function ()
+        $this->dbh = (Closure::bind(function ()
         {
             return $this->dbh;
         }, $this->db, 'wpdb'))();
@@ -138,7 +142,7 @@ class Connection implements ConnectionInterface
         $result = $this->db->get_row($query);
 
         if ($result === false || $this->db->last_error) {
-            throw new QueryException($query, $bindings, new \Exception($this->db->last_error));
+            throw new QueryException($query, $bindings, new Exception($this->db->last_error));
         }
 
         return $result;
@@ -177,7 +181,7 @@ class Connection implements ConnectionInterface
         $result = $this->db->get_results($query);
 
         if ($result === false || $this->db->last_error) {
-            throw new QueryException($query, $bindings, new \Exception($this->db->last_error));
+            throw new QueryException($query, $bindings, new Exception($this->db->last_error));
         }
 
         return $result;
@@ -192,7 +196,7 @@ class Connection implements ConnectionInterface
      *
      * @return array
      */
-    public function selectFromWriteConnection($query, $bindings = [])
+    public function selectFromWriteConnection(string $query, array $bindings = []): array
     {
         return $this->select($query, $bindings, false);
     }
@@ -207,7 +211,7 @@ class Connection implements ConnectionInterface
      *
      * @return array|string|string[]
      */
-    private function bind_params($query, $bindings, $update = false)
+    private function bind_params($query, $bindings, bool $update = false)
     {
 
         $query    = str_replace('"', '`', $query);
@@ -250,7 +254,7 @@ class Connection implements ConnectionInterface
         $result = $this->db->query($new_query);
 
         if ($result === false || $this->db->last_error) {
-            throw new QueryException($new_query, $bindings, new \Exception($this->db->last_error));
+            throw new QueryException($new_query, $bindings, new Exception($this->db->last_error));
         }
 
         return (array)$result;
@@ -325,7 +329,7 @@ class Connection implements ConnectionInterface
         $result = $this->db->query($new_query);
 
         if ($result === false || $this->db->last_error) {
-            throw new QueryException($new_query, $bindings, new \Exception($this->db->last_error));
+            throw new QueryException($new_query, $bindings, new Exception($this->db->last_error));
         }
 
         return intval($result);
@@ -363,7 +367,7 @@ class Connection implements ConnectionInterface
                 $bindings[ $key ] = intval($value);
             } elseif (is_scalar($value)) {
                 continue;
-            } elseif ($value instanceof \DateTime) {
+            } elseif ($value instanceof DateTime) {
                 // We need to transform all instances of the DateTime class into an actual
                 // date string. Each query grammar maintains its own date string format
                 // so we'll just ask the grammar for the format to get from the date.
@@ -384,7 +388,7 @@ class Connection implements ConnectionInterface
      *
      * @throws \Exception
      */
-    public function transaction(\Closure $callback, $attempts = 1)
+    public function transaction(Closure $callback, $attempts = 1)
     {
         $this->beginTransaction();
         try {
@@ -392,7 +396,7 @@ class Connection implements ConnectionInterface
             $this->commit();
 
             return $data;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->rollBack();
             throw $e;
         }
@@ -473,7 +477,7 @@ class Connection implements ConnectionInterface
      *
      * @return void
      */
-    public function pretend(\Closure $callback)
+    public function pretend(Closure $callback)
     {
         // TODO: Implement pretend() method.
     }
@@ -488,12 +492,12 @@ class Connection implements ConnectionInterface
         return new Grammar();
     }
 
-    public function getSchemaBuilder()
+    public function getSchemaBuilder(): WPSchemaBuilder
     {
         return new WPSchemaBuilder($this);
     }
 
-    public function getSchemaGrammar()
+    public function getSchemaGrammar(): MySqlGrammar
     {
         return new MySqlGrammar();
     }
@@ -528,7 +532,6 @@ class Connection implements ConnectionInterface
 
     /**
      * Run a select statement against the database and returns a generator.
-     * TODO: Implement cursor and all the related sub-methods.
      *
      * @param string $query
      * @param array  $bindings
@@ -536,7 +539,7 @@ class Connection implements ConnectionInterface
      *
      * @return \Generator
      */
-    public function cursor($query, $bindings = [], $useReadPdo = true)
+    public function cursor($query, $bindings = [], $useReadPdo = true): Generator
     {
         $query = $this->bind_params($query, $bindings);
 
