@@ -409,7 +409,7 @@ class Connection implements ConnectionInterface
      * +     * @param string|null $option
      * +     * @return mixed
      * +     */
-    public function getConfig(string $option = null)
+    public function getConfig(?string $option = null)
     {
         return Arr::get($this->config, $option);
     }
