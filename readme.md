@@ -18,7 +18,7 @@ This is a library package to use Laravel's [Eloquent ORM](http://laravel.com/doc
  - It doesn't create any extra MySQL connection
 
 ## Minimum Requirement
- - PHP 7.0
+ - PHP 8.3
  - WordPress 3.6+
 
 ## Package Installation

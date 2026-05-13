@@ -204,7 +204,7 @@ abstract class Model extends Eloquent
     /**
      * @return string
      */
-    public function getConnectionName(): string
+    public function getConnectionName(): ?string
     {
         return 'wpdb';
     }

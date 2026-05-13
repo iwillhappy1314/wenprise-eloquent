@@ -1,6 +1,7 @@
 <?php
 namespace Wenprise\Eloquent;
 
+use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\ConnectionResolverInterface;
 
 class Resolver implements ConnectionResolverInterface {
@@ -12,7 +13,8 @@ class Resolver implements ConnectionResolverInterface {
      *
      * @return false|\Wenprise\Eloquent\Connection
      */
-    public function connection( $name = null ) {
+    public function connection($name = null): ConnectionInterface
+    {
         return Connection::instance();
     }
 
@@ -21,8 +23,9 @@ class Resolver implements ConnectionResolverInterface {
      *
      * @return void
      */
-    public function getDefaultConnection() {
-        // TODO: Implement getDefaultConnection() method.
+    public function getDefaultConnection(): string
+    {
+        return 'wpdb';
     }
 
     /**
@@ -32,7 +35,8 @@ class Resolver implements ConnectionResolverInterface {
      *
      * @return void
      */
-    public function setDefaultConnection( $name ) {
-        // TODO: Implement setDefaultConnection() method.
+    public function setDefaultConnection($name): void
+    {
+        //
     }
 }

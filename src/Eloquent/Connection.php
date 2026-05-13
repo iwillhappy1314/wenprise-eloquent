@@ -135,7 +135,7 @@ class Connection implements ConnectionInterface
      * @throws QueryException
      *
      */
-    public function selectOne($query, $bindings = [], $useReadPdo = true)
+    public function selectOne($query, $bindings = [], $useReadPdo = true): mixed
     {
         $query = $this->bind_params($query, $bindings);
 
@@ -146,6 +146,29 @@ class Connection implements ConnectionInterface
         }
 
         return $result;
+    }
+
+
+    /**
+     * Run a select statement and return the first column of the first row.
+     *
+     * @param string $query
+     * @param array  $bindings
+     * @param bool   $useReadPdo
+     *
+     * @return mixed
+     *
+     * @throws QueryException
+     */
+    public function scalar($query, $bindings = [], $useReadPdo = true): mixed
+    {
+        $record = $this->selectOne($query, $bindings, $useReadPdo);
+
+        if (is_null($record)) {
+            return null;
+        }
+
+        return head((array)$record);
     }
 
 
@@ -174,7 +197,7 @@ class Connection implements ConnectionInterface
      * @throws QueryException
      *
      */
-    public function select($query, $bindings = [], $useReadPdo = true)
+    public function select($query, $bindings = [], $useReadPdo = true, array $fetchUsing = []): array
     {
         $query = $this->bind_params($query, $bindings);
 
@@ -539,7 +562,7 @@ class Connection implements ConnectionInterface
      *
      * @return \Generator
      */
-    public function cursor($query, $bindings = [], $useReadPdo = true): Generator
+    public function cursor($query, $bindings = [], $useReadPdo = true, array $fetchUsing = []): Generator
     {
         $query = $this->bind_params($query, $bindings);
 
