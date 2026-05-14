@@ -105,7 +105,7 @@ class Connection extends BaseConnection
      *
      * @return \Illuminate\Database\Query\Builder
      */
-    public function table(\Closure|Builder|string $table, $as = null): Builder
+    public function table($table, $as = null): Builder
     {
         $processor = $this->getPostProcessor();
 
@@ -137,7 +137,7 @@ class Connection extends BaseConnection
      * @throws QueryException
      *
      */
-    public function selectOne(string $query, array $bindings = [], bool $useReadPdo = true): mixed
+    public function selectOne($query, $bindings = [], $useReadPdo = true): mixed
     {
         $query = $this->bind_params($query, $bindings);
 
@@ -162,7 +162,7 @@ class Connection extends BaseConnection
      *
      * @throws QueryException
      */
-    public function scalar(string $query, array $bindings = [], bool $useReadPdo = true): mixed
+    public function scalar($query, $bindings = [], $useReadPdo = true): mixed
     {
         $record = $this->selectOne($query, $bindings, $useReadPdo);
 
@@ -199,7 +199,7 @@ class Connection extends BaseConnection
      * @throws QueryException
      *
      */
-    public function select(string $query, array $bindings = [], bool $useReadPdo = true, array $fetchUsing = []): array
+    public function select($query, $bindings = [], $useReadPdo = true, array $fetchUsing = []): array
     {
         $query = $this->bind_params($query, $bindings);
 
@@ -293,7 +293,7 @@ class Connection extends BaseConnection
      *
      * @return bool
      */
-    public function insert(string $query, array $bindings = []): bool
+    public function insert($query, $bindings = []): bool
     {
         return $this->statement($query, $bindings);
     }
@@ -306,7 +306,7 @@ class Connection extends BaseConnection
      *
      * @return int
      */
-    public function update(string $query, array $bindings = []): int
+    public function update($query, $bindings = []): int
     {
         return $this->affectingStatement($query, $bindings);
     }
@@ -319,7 +319,7 @@ class Connection extends BaseConnection
      *
      * @return int
      */
-    public function delete(string $query, array $bindings = []): int
+    public function delete($query, $bindings = []): int
     {
         return $this->affectingStatement($query, $bindings);
     }
@@ -332,7 +332,7 @@ class Connection extends BaseConnection
      *
      * @return bool
      */
-    public function statement(string $query, array $bindings = []): bool
+    public function statement($query, $bindings = []): bool
     {
         $new_query = $this->bind_params($query, $bindings, true);
 
@@ -347,7 +347,7 @@ class Connection extends BaseConnection
      *
      * @return int
      */
-    public function affectingStatement(string $query, array $bindings = []): int
+    public function affectingStatement($query, $bindings = []): int
     {
         $new_query = $this->bind_params($query, $bindings, true);
 
@@ -367,7 +367,7 @@ class Connection extends BaseConnection
      *
      * @return bool
      */
-    public function unprepared(string $query): bool
+    public function unprepared($query): bool
     {
         $result = $this->db->query($query);
 
@@ -564,7 +564,7 @@ class Connection extends BaseConnection
      *
      * @return \Generator
      */
-    public function cursor(string $query, array $bindings = [], bool $useReadPdo = true, array $fetchUsing = []): Generator
+    public function cursor($query, $bindings = [], $useReadPdo = true, array $fetchUsing = []): Generator
     {
         $query = $this->bind_params($query, $bindings);
 
