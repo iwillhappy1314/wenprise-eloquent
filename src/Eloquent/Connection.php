@@ -413,7 +413,7 @@ class Connection extends BaseConnection
      *
      * @throws \Exception
      */
-    public function transaction(\Closure $callback, $attempts = 1): mixed
+    public function transaction(\Closure $callback, $attempts = 1)
     {
         $this->beginTransaction();
         try {
@@ -429,12 +429,12 @@ class Connection extends BaseConnection
 
 
     /**
-     * +     * Get an option from the configuration options.
-     * +     *
-     * +     * @param string|null $option
-     * +     * @return mixed
-     * +     */
-    public function getConfig(?string $option = null)
+     * Get an option from the configuration options.
+     *
+     * @param string|null $option
+     * @return mixed
+     */
+    public function getConfig($option = null)
     {
         return Arr::get($this->config, $option);
     }
@@ -474,7 +474,7 @@ class Connection extends BaseConnection
      *
      * @return void
      */
-    public function rollBack()
+    public function rollBack($toLevel = null)
     {
         if ($this->transactionCount < 1) {
             return;
@@ -490,7 +490,7 @@ class Connection extends BaseConnection
      *
      * @return int
      */
-    public function transactionLevel(): int
+    public function transactionLevel()
     {
         return $this->transactionCount;
     }
