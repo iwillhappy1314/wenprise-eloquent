@@ -37,7 +37,7 @@ class Connection extends BaseConnection
      *
      * @var array
      */
-    protected array $config = [];
+    protected $config = [];
 
     /**
      * Get the database connection name.
