@@ -6,6 +6,7 @@ use Closure;
 use DateTime;
 use Exception;
 use Generator;
+use Illuminate\Database\Connection as BaseConnection;
 use Illuminate\Database\ConnectionInterface;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Query\Grammars\Grammar;
@@ -16,7 +17,7 @@ use Illuminate\Database\Schema\Grammars\MySqlGrammar;
 use Illuminate\Support\Arr;
 
 
-class Connection implements ConnectionInterface
+class Connection extends BaseConnection
 {
 
     public $db;
@@ -71,16 +72,17 @@ class Connection implements ConnectionInterface
     {
         global $wpdb;
 
+        $this->db     = $wpdb;
         $this->config = [
             'name' => 'wpdb',
         ];
-
-        $this->db = $wpdb;
 
         $this->dbh = (Closure::bind(function ()
         {
             return $this->dbh;
         }, $this->db, 'wpdb'))();
+
+        parent::__construct($this->dbh, $wpdb->dbname, $wpdb->prefix, $this->config);
     }
 
 
@@ -103,13 +105,13 @@ class Connection implements ConnectionInterface
      *
      * @return \Illuminate\Database\Query\Builder
      */
-    public function table($table, $as = null): Builder
+    public function table(\Closure|Builder|string $table, $as = null): Builder
     {
         $processor = $this->getPostProcessor();
 
         $query = new Builder($this, $this->getQueryGrammar(), $processor);
 
-        return $query->from($table);
+        return $query->from($table, $as);
     }
 
     /**
@@ -135,14 +137,14 @@ class Connection implements ConnectionInterface
      * @throws QueryException
      *
      */
-    public function selectOne($query, $bindings = [], $useReadPdo = true): mixed
+    public function selectOne(string $query, array $bindings = [], bool $useReadPdo = true): mixed
     {
         $query = $this->bind_params($query, $bindings);
 
         $result = $this->db->get_row($query);
 
         if ($result === false || $this->db->last_error) {
-            throw new QueryException($query, $bindings, new Exception($this->db->last_error));
+            throw new QueryException($this->getName(), $query, $bindings, new Exception($this->db->last_error));
         }
 
         return $result;
@@ -160,7 +162,7 @@ class Connection implements ConnectionInterface
      *
      * @throws QueryException
      */
-    public function scalar($query, $bindings = [], $useReadPdo = true): mixed
+    public function scalar(string $query, array $bindings = [], bool $useReadPdo = true): mixed
     {
         $record = $this->selectOne($query, $bindings, $useReadPdo);
 
@@ -197,14 +199,14 @@ class Connection implements ConnectionInterface
      * @throws QueryException
      *
      */
-    public function select($query, $bindings = [], $useReadPdo = true, array $fetchUsing = []): array
+    public function select(string $query, array $bindings = [], bool $useReadPdo = true, array $fetchUsing = []): array
     {
         $query = $this->bind_params($query, $bindings);
 
         $result = $this->db->get_results($query);
 
         if ($result === false || $this->db->last_error) {
-            throw new QueryException($query, $bindings, new Exception($this->db->last_error));
+            throw new QueryException($this->getName(), $query, $bindings, new Exception($this->db->last_error));
         }
 
         return $result;
@@ -277,7 +279,7 @@ class Connection implements ConnectionInterface
         $result = $this->db->query($new_query);
 
         if ($result === false || $this->db->last_error) {
-            throw new QueryException($new_query, $bindings, new Exception($this->db->last_error));
+            throw new QueryException($this->getName(), $new_query, $bindings, new Exception($this->db->last_error));
         }
 
         return (array)$result;
@@ -291,7 +293,7 @@ class Connection implements ConnectionInterface
      *
      * @return bool
      */
-    public function insert($query, $bindings = []): bool
+    public function insert(string $query, array $bindings = []): bool
     {
         return $this->statement($query, $bindings);
     }
@@ -304,7 +306,7 @@ class Connection implements ConnectionInterface
      *
      * @return int
      */
-    public function update($query, $bindings = []): int
+    public function update(string $query, array $bindings = []): int
     {
         return $this->affectingStatement($query, $bindings);
     }
@@ -317,7 +319,7 @@ class Connection implements ConnectionInterface
      *
      * @return int
      */
-    public function delete($query, $bindings = []): int
+    public function delete(string $query, array $bindings = []): int
     {
         return $this->affectingStatement($query, $bindings);
     }
@@ -330,7 +332,7 @@ class Connection implements ConnectionInterface
      *
      * @return bool
      */
-    public function statement($query, $bindings = []): bool
+    public function statement(string $query, array $bindings = []): bool
     {
         $new_query = $this->bind_params($query, $bindings, true);
 
@@ -345,14 +347,14 @@ class Connection implements ConnectionInterface
      *
      * @return int
      */
-    public function affectingStatement($query, $bindings = []): int
+    public function affectingStatement(string $query, array $bindings = []): int
     {
         $new_query = $this->bind_params($query, $bindings, true);
 
         $result = $this->db->query($new_query);
 
         if ($result === false || $this->db->last_error) {
-            throw new QueryException($new_query, $bindings, new Exception($this->db->last_error));
+            throw new QueryException($this->getName(), $new_query, $bindings, new Exception($this->db->last_error));
         }
 
         return intval($result);
@@ -365,7 +367,7 @@ class Connection implements ConnectionInterface
      *
      * @return bool
      */
-    public function unprepared($query): bool
+    public function unprepared(string $query): bool
     {
         $result = $this->db->query($query);
 
@@ -411,7 +413,7 @@ class Connection implements ConnectionInterface
      *
      * @throws \Exception
      */
-    public function transaction(Closure $callback, $attempts = 1)
+    public function transaction(\Closure $callback, $attempts = 1): mixed
     {
         $this->beginTransaction();
         try {
@@ -512,7 +514,7 @@ class Connection implements ConnectionInterface
 
     public function getQueryGrammar(): Grammar
     {
-        return new Grammar();
+        return new Grammar($this);
     }
 
     public function getSchemaBuilder(): WPSchemaBuilder
@@ -522,7 +524,7 @@ class Connection implements ConnectionInterface
 
     public function getSchemaGrammar(): MySqlGrammar
     {
-        return new MySqlGrammar();
+        return new MySqlGrammar($this);
     }
 
     public function getTablePrefix(): string
@@ -562,7 +564,7 @@ class Connection implements ConnectionInterface
      *
      * @return \Generator
      */
-    public function cursor($query, $bindings = [], $useReadPdo = true, array $fetchUsing = []): Generator
+    public function cursor(string $query, array $bindings = [], bool $useReadPdo = true, array $fetchUsing = []): Generator
     {
         $query = $this->bind_params($query, $bindings);
 
