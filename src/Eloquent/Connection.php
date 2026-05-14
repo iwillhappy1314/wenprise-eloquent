@@ -221,7 +221,7 @@ class Connection extends BaseConnection
      *
      * @return array
      */
-    public function selectFromWriteConnection(string $query, array $bindings = []): array
+    public function selectFromWriteConnection($query, $bindings = []): array
     {
         return $this->select($query, $bindings, false);
     }
@@ -272,7 +272,7 @@ class Connection extends BaseConnection
      * @throws QueryException
      *
      */
-    public function bind_and_run(string $query, array $bindings = []): array
+    public function bind_and_run($query, array $bindings = []): array
     {
         $new_query = $this->bind_params($query, $bindings);
 
@@ -537,7 +537,7 @@ class Connection extends BaseConnection
      *
      * @return \Wenprise\Eloquent\Connection
      */
-    public function getPdo(): Connection
+    public function getPdo()
     {
         return $this;
     }
@@ -549,7 +549,7 @@ class Connection extends BaseConnection
      *
      * @return int
      */
-    public function lastInsertId(string $args): int
+    public function lastInsertId($args = null): int
     {
         return $this->db->insert_id;
     }
